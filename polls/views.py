@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 # Create your views here.
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 
 from .models import Choice, Question
@@ -24,6 +24,8 @@ def vote(request, question_id):
   question = get_object_or_404(Question, pk=question_id)
   try:
     selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    # request.POST is a dictionary-like object that lets you access your submitted data by key name
+    # request.POST['choice'] returns the ID of the selected choice, and ALWAYS as a string
   except (KeyError, Choice.DoesNotExist):
     # Redisplay the question voting form
     return render(request, 'polls/details.html', {
